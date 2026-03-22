@@ -1,51 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- SEO заголовки -->
     <title>ScanTire AI — Automated Tire Inspection with Computer Vision</title>
-    <meta name="description" content="AI-powered tire inspection in 10 seconds. Measure tread depth, detect wear, identify tire type using smartphone camera. No expensive equipment needed.">
-    <meta name="keywords" content="tire inspection, AI tire scanner, tread depth measurement, tire wear detection, computer vision, automated tire grading">
+    <meta name="description"
+        content="AI-powered tire inspection in 10 seconds. Measure tread depth, detect wear, identify tire type using smartphone camera. No expensive equipment needed.">
+    <meta name="keywords"
+        content="tire inspection, AI tire scanner, tread depth measurement, tire wear detection, computer vision, automated tire grading">
     <meta name="author" content="ScanTire">
-    
+
     <!-- Open Graph (соцсети) -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="ScanTire AI — Automated Tire Inspection">
     <meta property="og:description" content="Grade any tire in 10 seconds with AI. No expensive equipment needed.">
     <meta property="og:url" content="https://scantire.com">
     <meta property="og:image" content="https://scantire.com/og-image.jpg">
-    
+
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="ScanTire AI — Automated Tire Inspection">
     <meta name="twitter:description" content="AI-powered tire grading in 10 seconds using smartphone camera.">
     <meta name="twitter:image" content="https://scantire.com/og-image.jpg">
-    
+
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
-    
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+
     <!-- Шрифты -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
     <!-- Яндекс.Метрика -->
     <script type="text/javascript">
-       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-       m[i].l=1*new Date();
-       for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-       k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
+            m[i].l = 1 * new Date();
+            for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })
+            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-       ym(99999999, "init", {
-            clickmap:true,
-            trackLinks:true,
-            accurateTrackBounce:true,
-            webvisor:true
-       });
+        ym(99999999, "init", {
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true,
+            webvisor: true
+        });
     </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/9999999" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/9999999" style="position:absolute; left:-9999px;" alt="" /></div>
+    </noscript>
     <!-- /Яндекс.Метрика (ЗАМЕНИ 99999999 на свой ID когда создашь счётчик) -->
 
     <style>
@@ -87,13 +97,11 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0.1) 0px,
-                rgba(0, 0, 0, 0.1) 1px,
-                transparent 1px,
-                transparent 2px
-            );
+            background: repeating-linear-gradient(0deg,
+                    rgba(0, 0, 0, 0.1) 0px,
+                    rgba(0, 0, 0, 0.1) 1px,
+                    transparent 1px,
+                    transparent 2px);
             z-index: 1000;
             opacity: 0.3;
         }
@@ -154,37 +162,170 @@
             text-align: center;
         }
 
+        /* AR Mockup */
         .ar-mockup {
             max-width: 800px;
             margin: 0 auto 40px;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 40px;
-            min-height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 20px;
             position: relative;
             overflow: hidden;
         }
 
-        .ar-mockup::before {
-            content: "🚧";
-            font-size: 4rem;
+        .ar-tire-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            filter: brightness(0.9) contrast(1.1);
+        }
+
+        .ar-scan-line {
             position: absolute;
-            opacity: 0.1;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            height: 3px;
+            background: var(--primary);
+            box-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary);
+            animation: scan 2s linear infinite;
+            opacity: 0.8;
         }
 
-        .ar-placeholder {
-            text-align: center;
+        @keyframes scan {
+            0% {
+                top: 20px;
+            }
+
+            50% {
+                top: calc(100% - 23px);
+            }
+
+            100% {
+                top: 20px;
+            }
+        }
+
+        .ar-frame {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            right: 40px;
+            bottom: 40px;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .ar-corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-color: var(--primary);
+            border-style: solid;
+            border-width: 0;
+        }
+
+        .ar-corner-tl {
+            top: 30px;
+            left: 30px;
+            border-top-width: 4px;
+            border-left-width: 4px;
+        }
+
+        .ar-corner-tr {
+            top: 30px;
+            right: 30px;
+            border-top-width: 4px;
+            border-right-width: 4px;
+        }
+
+        .ar-corner-bl {
+            bottom: 30px;
+            left: 30px;
+            border-bottom-width: 4px;
+            border-left-width: 4px;
+        }
+
+        .ar-corner-br {
+            bottom: 30px;
+            right: 30px;
+            border-bottom-width: 4px;
+            border-right-width: 4px;
+        }
+
+        .ar-data {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            min-width: 180px;
+        }
+
+        .ar-data-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 4px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ar-data-row:last-child {
+            border-bottom: none;
+        }
+
+        .ar-label {
             color: var(--text-dim);
+            font-size: 0.75rem;
         }
 
-        .ar-placeholder h3 {
-            color: var(--text-gray);
-            margin-bottom: 12px;
-            font-size: 1.2rem;
+        .ar-value {
+            color: var(--text-white);
+            font-weight: 500;
+        }
+
+        .ar-highlight {
+            color: var(--primary);
+        }
+
+        .ar-status-good {
+            color: #00ff41;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+
+        .ar-status-warning {
+            color: #ffaa00;
+        }
+
+        .ar-status-critical {
+            color: #ff4444;
+        }
+
+        @media (max-width: 768px) {
+            .ar-mockup {
+                padding: 10px;
+            }
+
+            .ar-data {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                margin-top: 16px;
+                width: 100%;
+            }
+
+            .ar-frame,
+            .ar-corner {
+                display: none;
+            }
         }
 
         .badge {
@@ -201,8 +342,15 @@
         }
 
         @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 var(--primary-glow); }
-            50% { box-shadow: 0 0 20px 5px var(--primary-glow); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 var(--primary-glow);
+            }
+
+            50% {
+                box-shadow: 0 0 20px 5px var(--primary-glow);
+            }
         }
 
         .hero h1 {
@@ -447,14 +595,10 @@
             .email-form {
                 flex-direction: column;
             }
-
-            .ar-mockup {
-                padding: 20px;
-                min-height: 300px;
-            }
         }
     </style>
 </head>
+
 <body>
 
     <header>
@@ -471,12 +615,37 @@
 
     <section class="hero">
         <div class="container">
-            <!-- AR Mockup (заглушка) -->
+            <!-- AR Mockup -->
             <div class="ar-mockup">
-                <div class="ar-placeholder">
-                    <h3>AR Demo Coming Soon</h3>
-                    <p>AI-powered tire inspection visualization</p>
+                <img src="898.jpg" alt="Tire scan demo" class="ar-tire-image">
+                <div class="ar-scan-line"></div>
+                <div class="ar-frame"></div>
+                <div class="ar-data">
+                    <div class="ar-data-row">
+                        <span class="ar-label">TYPE</span>
+                        <span class="ar-value">Summer</span>
+                    </div>
+                    <div class="ar-data-row">
+                        <span class="ar-label">BRAND</span>
+                        <span class="ar-value">Toyo</span>
+                    </div>
+                    <div class="ar-data-row">
+                        <span class="ar-label">DEPTH</span>
+                        <span class="ar-value ar-highlight">6.0 mm</span>
+                    </div>
+                    <div class="ar-data-row">
+                        <span class="ar-label">WEAR</span>
+                        <span class="ar-value ar-status-good">GOOD</span>
+                    </div>
+                    <div class="ar-data-row">
+                        <span class="ar-label">LIFE</span>
+                        <span class="ar-value">~30,000 km</span>
+                    </div>
                 </div>
+                <div class="ar-corner ar-corner-tl"></div>
+                <div class="ar-corner ar-corner-tr"></div>
+                <div class="ar-corner ar-corner-bl"></div>
+                <div class="ar-corner ar-corner-br"></div>
             </div>
 
             <div class="badge">🚀 AI-Powered Tire Inspection</div>
@@ -485,21 +654,15 @@
                 <span class="highlight">In 10 Seconds</span>
             </h1>
             <p class="subtitle">
-                Computer vision AI that measures tread depth, detects wear patterns, 
+                Computer vision AI that measures tread depth, detects wear patterns,
                 and grades tire condition — using just a smartphone camera.
             </p>
 
             <!-- Email форма -->
             <form action="https://formsubmit.co/1f97c8003804736aaf30d5712010e602" method="POST" class="email-form">
-                <input 
-                    type="email" 
-                    name="email" 
-                    placeholder="your@email.com" 
-                    required
-                    class="email-input"
-                >
+                <input type="email" name="email" placeholder="your@email.com" required class="email-input">
                 <button type="submit" class="btn btn-primary">Join Waitlist</button>
-                
+
                 <input type="hidden" name="_subject" value="New ScanTire Waitlist Signup!">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="box">
@@ -520,7 +683,8 @@
                 <div class="feature-card">
                     <div class="feature-icon">📏</div>
                     <h3>Tread Depth Measurement</h3>
-                    <p>Uses TWI (Tread Wear Indicators) as reference points to calculate remaining tread depth with millimeter precision.</p>
+                    <p>Uses TWI (Tread Wear Indicators) as reference points to calculate remaining tread depth with
+                        millimeter precision.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🔤</div>
@@ -535,7 +699,8 @@
                 <div class="feature-card">
                     <div class="feature-icon">📊</div>
                     <h3>Wear Grading</h3>
-                    <p>AI grades tire condition into 5 classes: New, Good, Medium, Worn, Critical — with confidence scores.</p>
+                    <p>AI grades tire condition into 5 classes: New, Good, Medium, Worn, Critical — with confidence
+                        scores.</p>
                 </div>
             </div>
         </div>
@@ -568,17 +733,11 @@
         <div class="container">
             <h2>Ready to Automate Tire Inspection?</h2>
             <p>Join early adopters getting access to ScanTire AI</p>
-            
+
             <form action="https://formsubmit.co/1f97c8003804736aaf30d5712010e602" method="POST" class="email-form">
-                <input 
-                    type="email" 
-                    name="email" 
-                    placeholder="your@email.com" 
-                    required
-                    class="email-input"
-                >
+                <input type="email" name="email" placeholder="your@email.com" required class="email-input">
                 <button type="submit" class="btn btn-primary">Join Waitlist</button>
-                
+
                 <input type="hidden" name="_subject" value="New ScanTire Waitlist Signup!">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="box">
@@ -603,4 +762,5 @@
     </footer>
 
 </body>
+
 </html>
