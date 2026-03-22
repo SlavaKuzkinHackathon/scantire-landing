@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO заголовки -->
+    <title>ScanTire AI — Automated Tire Inspection with Computer Vision</title>
+    <meta name="description" content="AI-powered tire inspection in 10 seconds. Measure tread depth, detect wear, identify tire type using smartphone camera. No expensive equipment needed.">
+    <meta name="keywords" content="tire inspection, AI tire scanner, tread depth measurement, tire wear detection, computer vision, automated tire grading">
+    <meta name="author" content="ScanTire">
+    
+    <!-- Open Graph (соцсети) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ScanTire AI — Automated Tire Inspection">
+    <meta property="og:description" content="Grade any tire in 10 seconds with AI. No expensive equipment needed.">
+    <meta property="og:url" content="https://scantire.com">
+    <meta property="og:image" content="https://scantire.com/og-image.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ScanTire AI — Automated Tire Inspection">
+    <meta name="twitter:description" content="AI-powered tire grading in 10 seconds using smartphone camera.">
+    <meta name="twitter:image" content="https://scantire.com/og-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+    
+    <!-- Шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Яндекс.Метрика -->
+    <script type="text/javascript">
+       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+       m[i].l=1*new Date();
+       for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+       k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+       ym(99999999, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true,
+            webvisor:true
+       });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/99999999" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Яндекс.Метрика (ЗАМЕНИ 99999999 на свой ID когда создашь счётчик) -->
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00ff41;
+            --primary-dim: rgba(0, 255, 65, 0.1);
+            --primary-glow: rgba(0, 255, 65, 0.3);
+            --bg-dark: #0a0a0a;
+            --bg-card: #111111;
+            --bg-card-hover: #1a1a1a;
+            --text-white: #ffffff;
+            --text-gray: #888888;
+            --text-dim: #555555;
+            --border: #222222;
+            --gradient-1: linear-gradient(135deg, #00ff41 0%, #00cc33 100%);
+            --gradient-bg: radial-gradient(ellipse at top, #0f1a0f 0%, #0a0a0a 50%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            background-image: var(--gradient-bg);
+            color: var(--text-white);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            z-index: 1000;
+            opacity: 0.3;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nav-contact {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-contact:hover {
+            color: var(--primary);
+        }
+
+        /* AR Mockup Hero */
+        .hero {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .ar-mockup {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ar-mockup::before {
+            content: "🚧";
+            font-size: 4rem;
+            position: absolute;
+            opacity: 0.1;
+        }
+
+        .ar-placeholder {
+            text-align: center;
+            color: var(--text-dim);
+        }
+
+        .ar-placeholder h3 {
+            color: var(--text-gray);
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--primary-dim);
+            border: 1px solid var(--primary);
+            border-radius: 50px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-bottom: 24px;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 var(--primary-glow); }
+            50% { box-shadow: 0 0 20px 5px var(--primary-glow); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 .highlight {
+            color: var(--primary);
+        }
+
+        .hero .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-gray);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        /* Email форма */
+        .email-form {
+            display: flex;
+            gap: 12px;
+            max-width: 500px;
+            margin: 32px auto 0;
+        }
+
+        .email-input {
+            flex: 1;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-white);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-dim);
+        }
+
+        .email-input::placeholder {
+            color: var(--text-dim);
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--bg-dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--primary-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-white);
+            border: 1px solid var(--border);
+            display: inline-block;
+            margin-top: 16px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Features */
+        .features {
+            padding: 80px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .section-title p {
+            color: var(--text-gray);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-dim);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        /* Stats */
+        .stats {
+            padding: 60px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-item p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        /* CTA */
+        .cta-section {
+            padding: 80px 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            color: var(--text-gray);
+            margin-bottom: 32px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copy {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 40px 0;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .email-form {
+                flex-direction: column;
+            }
+
+            .ar-mockup {
+                padding: 20px;
+                min-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <div class="logo-icon">🔍</div>
+                    ScanTire
+                </a>
+                <a href="mailto:scantireai@gmail.com" class="nav-contact">scantireai@gmail.com</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <!-- AR Mockup (заглушка) -->
+            <div class="ar-mockup">
+                <div class="ar-placeholder">
+                    <h3>AR Demo Coming Soon</h3>
+                    <p>AI-powered tire inspection visualization</p>
+                </div>
+            </div>
+
+            <div class="badge">🚀 AI-Powered Tire Inspection</div>
+            <h1>
+                Scan Any Tire<br>
+                <span class="highlight">In 10 Seconds</span>
+            </h1>
+            <p class="subtitle">
+                Computer vision AI that measures tread depth, detects wear patterns, 
+                and grades tire condition — using just a smartphone camera.
+            </p>
+
+            <!-- Email форма -->
+            <form action="https://formsubmit.co/1f97c8003804736aaf30d5712010e602" method="POST" class="email-form">
+                <input 
+                    type="email" 
+                    name="email" 
+                    placeholder="your@email.com" 
+                    required
+                    class="email-input"
+                >
+                <button type="submit" class="btn btn-primary">Join Waitlist</button>
+                
+                <input type="hidden" name="_subject" value="New ScanTire Waitlist Signup!">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="box">
+                <input type="hidden" name="_next" value="http://scantire.com">
+            </form>
+
+            <a href="#features" class="btn btn-secondary">Learn More</a>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>What ScanTire Does</h2>
+                <p>Four AI models working together to give you complete tire analysis</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📏</div>
+                    <h3>Tread Depth Measurement</h3>
+                    <p>Uses TWI (Tread Wear Indicators) as reference points to calculate remaining tread depth with millimeter precision.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔤</div>
+                    <h3>Size Recognition (OCR)</h3>
+                    <p>Reads embossed tire markings from curved sidewall surfaces using specialized computer vision.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">❄️</div>
+                    <h3>Type Classification</h3>
+                    <p>Identifies tire type — Summer, Winter Studded, Winter Friction, All-Season, or Off-Road.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Wear Grading</h3>
+                    <p>AI grades tire condition into 5 classes: New, Good, Medium, Worn, Critical — with confidence scores.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>&lt;10s</h3>
+                    <p>Analysis Time</p>
+                </div>
+                <div class="stat-item">
+                    <h3>±0.5mm</h3>
+                    <p>Precision</p>
+                </div>
+                <div class="stat-item">
+                    <h3>5</h3>
+                    <p>Wear Classes</p>
+                </div>
+                <div class="stat-item">
+                    <h3>$0</h3>
+                    <p>Equipment Cost</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Automate Tire Inspection?</h2>
+            <p>Join early adopters getting access to ScanTire AI</p>
+            
+            <form action="https://formsubmit.co/1f97c8003804736aaf30d5712010e602" method="POST" class="email-form">
+                <input 
+                    type="email" 
+                    name="email" 
+                    placeholder="your@email.com" 
+                    required
+                    class="email-input"
+                >
+                <button type="submit" class="btn btn-primary">Join Waitlist</button>
+                
+                <input type="hidden" name="_subject" value="New ScanTire Waitlist Signup!">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="box">
+                <input type="hidden" name="_next" value="http://scantire.com">
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">ScanTire AI</div>
+                <div class="footer-links">
+                    <a href="mailto:scantireai@gmail.com">Contact</a>
+                    <a href="https://github.com/SlavaKuzkinHackathon" target="_blank">GitHub</a>
+                </div>
+                <div class="footer-copy">
+                    © 2026 ScanTire. AI-Powered Tire Inspection.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
