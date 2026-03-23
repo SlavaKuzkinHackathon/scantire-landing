@@ -1,19 +1,19 @@
-# ScanTire AI — Automated Tire Inspection
+# Scan Tire AI — Automated Tire Inspection
 
 ![Status](https://img.shields.io/badge/status-pre--launch-yellow)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 **AI-powered tire inspection in 10 seconds using computer vision.**
 
-🌐 **Website:** [scantire.com](https://scantire.com)  
-📧 **Contact:** scantireai@gmail.com  
+🌐 **Website:** [ScanTire.com](https://ScanTire.com)  
+📧 **Contact:** Scan Tireai@gmail.com  
 🐙 **GitHub:** [@SlavaKuzkinHackathon](https://github.com/SlavaKuzkinHackathon)
 
 ---
 
-## 🎯 What is ScanTire?
+## 🎯 What is Scan Tire?
 
-ScanTire uses computer vision and deep learning to automatically inspect tires and provide detailed reports — no expensive equipment needed, just a smartphone camera.
+Scan Tire uses computer vision and deep learning to automatically inspect tires and provide detailed reports — no expensive equipment needed, just a smartphone camera.
 
 ### Key Features:
 
